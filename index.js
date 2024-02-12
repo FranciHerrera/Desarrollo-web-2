@@ -35,4 +35,15 @@ app.delete("/lentes/:id", (req, res) => {
     res.send("Se elimino el lente")
 });
 
+app.get("/lentes/:id",(req,res)=>{
+    const { id } = req.params;
+    const lente = lentes.find(lente => lente.id == id);
+    if (!lente){
+        if (!lente) {
+            return res.status(404).send("Lente no encontrado");
+        }
+        res.send(lente);
+    }
+});
+
 app.listen(3000)
