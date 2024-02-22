@@ -9,25 +9,30 @@ let lentes = [
     {id: 2, name: "steampunk"},
     {id: 3, name: "retro"}
 ];
+
+app.use(express.json())
+
 app.get("/lentes", (req, res) =>{
     res.send(lentes)
 });
 
 app.post("/lentes", (req, res) => {
     const { body }  = req
-    games.push(body)
+    lentes.push(body)
     res.send("Se agrego el lente")
 });
 
 app.patch("/lentes/:id", (req, res) => {
     const { body }  = req
     const { name } = body
-    const { id } = req.params;
-    
-    let lente = lentes.find((lente) => lente.id == id)
+    const { params } = req
+    const { id } = params
+    if(name === "" || name == undefined) res.send("Ingresa el nombre para poder actualizar")
+    const lente = lentes.find((lente) => lente.id == id)
     lente.name = name
-    res.send({message: "se elimino el lente", lente})
+    res.send({message: "se actualizo el producto", lente})
 });
+
 
 app.delete("/lentes/:id", (req, res) => {
     const { id } = req.params;
@@ -38,12 +43,13 @@ app.delete("/lentes/:id", (req, res) => {
 app.get("/lentes/:id",(req,res)=>{
     const { id } = req.params;
     const lente = lentes.find(lente => lente.id == id);
-    if (!lente){
-        if (!lente) {
-            return res.status(404).send("Lente no encontrado");
-        }
+    if (!lente) {
+        res.send("Lente no encontrado");
+    }
+    else{
         res.send(lente);
     }
 });
 
+console.log("Conectado en el puerto 3000")
 app.listen(3000)
